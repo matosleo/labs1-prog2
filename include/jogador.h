@@ -1,3 +1,12 @@
+/**
+ * @file	jogador.h
+ * @brief	Implementação da classe Jogador em C++
+ * @author	Leonardo dos Santos Matos
+ * @since	20/03/2018
+ * @date	05/04/2018
+ * @sa		https://github.com/matosleo
+ */
+
 #ifndef JOGADOR_H
 #define JOGADOR_H
 
@@ -12,9 +21,9 @@ enum Status {exlcuido, ativo};
 class Jogador {
 
 private:
-	int m_status;
-	std::string m_nome;
-	int m_total_pontos;
+	int m_status; /**< Representa o status do jogador: 0 para 'excluido' e 1 para 'ativo'. */
+	std::string m_nome; /**< Nome do jogador. */
+	int m_total_pontos; /**< Os pontos que o jogador irá acumular durante o jogo. */
 
 public:
 	Jogador();

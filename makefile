@@ -1,6 +1,4 @@
-# Comandos do sistema operacional
-# Linux: rm -rf 
-# Windows: cmd //C del 
+
 RM = rm -rf 
 
 # Compilador
@@ -16,11 +14,14 @@ DOC = ./doc
 # Define o nome do binario/executavel final
 PROG = $(BIN)/exerc2
 
+# Garante que os alvos desta lista nao sejam confundidos com arquivos de mesmo nome
+.PHONY: all clean debug doxy doc
+
 # Opcoes de compilacao
 CPPFLAGS = -Wall -pedantic -std=c++11 -I$(INC)
 
 # Lista dos arquivos objeto (.o) que formam o binario/executavel final
-OBJS = $(OBJ)/dado.o $(OBJ)/jogador.o $(OBJ)/sort.o $(OBJ)/jogo.o $(OBJ)/main.o
+OBJS = $(OBJ)/dado.o $(OBJ)/jogador.o $(OBJ)/jogo.o $(OBJ)/main.o
 
 all : $(OBJS)
 	$(CC) $(LDFLAGS) -o $(PROG) $(OBJS)
@@ -35,17 +36,24 @@ debug: all
 $(OBJ)/main.o : $(OBJ)/jogo.o 
 	$(CC) $(CPPFLAGS) -c $(SRC)/main.cpp -o $@
 
-$(OBJ)/jogo.o : $(INC)/jogo.h $(OBJ)/jogador.o $(OBJ)/sort.o
+$(OBJ)/jogo.o : $(INC)/jogo.h $(OBJ)/jogador.o
 	$(CC) $(CPPFLAGS) -c $(SRC)/jogo.cpp -o $@
-
-$(OBJ)/sort.o : $(INC)/sort.h $(OBJ)/jogador.o
-	$(CC) $(CPPFLAGS) -c $(SRC)/bubbleSort.cpp -o $@
 
 $(OBJ)/jogador.o : $(INC)/jogador.h $(OBJ)/dado.o
 	$(CC) $(CPPFLAGS) -c $(SRC)/jogador.cpp -o $@
 
 $(OBJ)/dado.o : $(INC)/dado.h
 	$(CC) $(CPPFLAGS) -c $(SRC)/dado.cpp -o $@
+
+# Alvo para a criação do arquivo Doxyfile.
+doxy:
+	doxygen -g
+
+# Alvo (target) para a geração automatica de documentacao usando o Doxygen.
+# Sempre remove a documentacao anterior (caso exista) e gera uma nova.
+doc:
+	$(RM) $(DOC)/*
+	doxygen ./Doxyfile
 
 # Alvo (target) usado para limpar os arquivos temporarios (objeto)
 # gerados durante a compilacao, assim como os arquivos binarios/executaveis.

@@ -1,3 +1,12 @@
+/**
+ * @file	jogo.cpp
+ * @brief	Implementação dos métodos da classe Jogo em C++
+ * @author	Leonardo dos Santos Matos
+ * @since	20/03/2018
+ * @date	05/04/2018
+ * @sa		https://github.com/matosleo
+ */
+
 #include "jogo.h"
 
 int Jogo::m_qtd_jogadores = 0;
@@ -11,16 +20,83 @@ Jogo::Jogo(int quant) {
 
 Jogo::~Jogo() {}
 
+/**
+  * @brief 		Pega a quantidade de jogadores participantes
+  * @details   
+  * @params		
+  * @return		Retorna um valor inteiro positivo
+  * @sa 		https://github.com/matosleo
+*/
 int 
 Jogo::getQtdJogadores(){
 	return m_qtd_jogadores;
 }
 
+/**
+  * @brief 		Altera a quantidade de jogadores na partida
+  * @details   
+  * @params		Um valor inteiro positivo
+  * @return		sem retorno
+  * @sa 		https://github.com/matosleo
+*/
 void 
 Jogo::setQtdJogadores(int quant){
-	m_qtd_jogadores = quant;
+	if(quant > 0) {
+		m_qtd_jogadores = quant;
+	}
 }
 
+/**
+  * @brief 		Funcao que troca os objetos de posição
+  * @details   	 
+  * @params		Objeto do tipo Jogador
+  * @params		Objeto do tipo Jogador
+  * @return		Sem retorno
+  * @sa 		https://github.com/matosleo
+*/
+void 
+Jogo::swap(Jogador& x, Jogador& y)
+{
+    Jogador aux = x;
+    x = y;
+    y = aux;
+}
+
+/**
+  * @brief 		Funcao Bubble Sort que ordena os objetos
+  * @details   Faz uma ordenação decrescente com bubble sort para classificar a
+  *colocação dos jogadores em relação aos pontos acumulados por eles 
+  * @params
+  * @return		Sem retorno
+  * @sa 		https://github.com/matosleo
+*/
+void 
+Jogo::sort(Jogador* lista)
+{
+	bool mudou = true;
+	int fim  = m_qtd_jogadores - 1;
+	while(mudou)
+	{
+		mudou = false;
+		for(int j = 0; j < fim; j++)
+		{
+			if(lista[j].getPontos() < lista[j + 1].getPontos())
+			{
+				swap(lista[j], lista[j + 1]);
+				mudou = true;
+			}
+		}
+		fim -= 1;
+	}
+}
+
+/**
+  * @brief 		Adiciona jogadores a lista de jogadores do jogo
+  * @details   
+  * @params		Recebe uma lista do tipo Jogador
+  * @return		sem retorno
+  * @sa 		https://github.com/matosleo
+*/
 void
 Jogo::addJogadores(Jogador* lista){
 	Jogador j;
@@ -31,7 +107,13 @@ Jogo::addJogadores(Jogador* lista){
 	}
 }
 
-
+/**
+  * @brief 		Imprime na tela as regras do jogo
+  * @details   
+  * @params		
+  * @return		sem retorno
+  * @sa 		https://github.com/matosleo
+*/
 void
 Jogo::imprimeRegra() {
 	std::cout << std::endl
@@ -49,6 +131,13 @@ Jogo::imprimeRegra() {
 	<< std::endl;
 }
 
+/**
+  * @brief 		Permite o jogador lançar os dados
+  * @details   
+  * @params		Recebe uma lista de jogadores participantes
+  * @return		Um valor que é a soma das faces dos dados lançados
+  * @sa 		https://github.com/matosleo
+*/
 int
 Jogo::lancarDados() {
 	int pontosDados = 0;
@@ -59,6 +148,13 @@ Jogo::lancarDados() {
 	return pontosDados;
 }
 
+/**
+  * @brief 		Verifica os jogadores com status de ativo
+  * @details   
+  * @params		Recebe uma lista de jogadores participantes
+  * @return		Retorna um valor inteiro da quantidade de jogadores com o status ativo
+  * @sa 		https://github.com/matosleo
+*/
 int
 Jogo::verificaAtivos(Jogador* lista) {
 	int contAtivos = 0;
@@ -70,6 +166,14 @@ Jogo::verificaAtivos(Jogador* lista) {
 	return contAtivos;
 }
 
+/**
+  * @brief 		Executa a rodada
+  * @details   	Este método faz com que os jogadores lancem os dados ou esperem, verifica se
+  *há vencedor e todas as condiçẽos de término do jogo
+  * @params		Recebe uma lista de jogadores participantes
+  * @return		sem retorno
+  * @sa 		https://github.com/matosleo
+*/
 void
 Jogo::jogarRodada(Jogador* lista) {
 	int opcao, flagContadora = 0;
@@ -152,6 +256,13 @@ Jogo::jogarRodada(Jogador* lista) {
 	}		
 }
 
+/**
+  * @brief 		Exibe o placar da rodada atual
+  * @details   
+  * @params		Recebe uma lista de jogadores participantes
+  * @return		sem retorno
+  * @sa 		https://github.com/matosleo
+*/
 void 
 Jogo::placarDaRodada(Jogador* lista) {
 	Jogador *tmp = new Jogador [m_qtd_jogadores];
@@ -159,7 +270,7 @@ Jogo::placarDaRodada(Jogador* lista) {
 		tmp[i] = lista[i];
 	}
 
-	sort(tmp, m_qtd_jogadores);
+	sort(tmp);
 	std::cout << std::endl << "        PLACAR DA RODADA" << std::endl;
 	for(int i = 0; i < m_qtd_jogadores; i++) {
 		std::cout << i+1 <<"º " << tmp[i];
@@ -167,7 +278,13 @@ Jogo::placarDaRodada(Jogador* lista) {
 	std::cout << std::endl;
 }
 
-
+/**
+  * @brief 		Exibe o jogador vencedor do jogo
+  * @details   
+  * @params		Recebe um ponteiro para o endereço do jogador vencedor
+  * @return		sem retorno
+  * @sa 		https://github.com/matosleo
+*/
 void
 Jogo::exibeVencedor(Jogador* vencedor) {
 	std::cout << std::endl << "O GRANDE VENCEDOR FOI " << vencedor->getNome() 
@@ -175,6 +292,14 @@ Jogo::exibeVencedor(Jogador* vencedor) {
 			<< " PONTOS" << std::endl;
 }
 
+/**
+  * @brief 		Função que executa o jogo
+  * @details 	A função exibe um menu, cria uma lista de objetos Jogador, executa as funções
+  * que criam as rodadas e mostra o placar e também que exibe o vencedor 
+  * @params		
+  * @return		sem retorno
+  * @sa 		https://github.com/matosleo
+*/
 void
 Jogo::run() {
 		int opcao;
